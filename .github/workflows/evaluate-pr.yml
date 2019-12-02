@@ -1,0 +1,24 @@
+name: Evaluation
+
+on: [pull_request]
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-18.04
+
+    timeout-minutes: 1
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+
+      - name: Evaluate
+        uses: docker://akosdudas/ahk-sample:evaluator-v1
+
+      - name: Publish results
+        uses: akosdudas/ahk-action-publish-result-pr@master
+        with:
+          input-file: "result.txt"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
