@@ -4,15 +4,26 @@ on: [pull_request]
 
 jobs:
   evaluate:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
-    timeout-minutes: 1
+    timeout-minutes: 3
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
         with:
           fetch-depth: 1
+
+      - name: Check neptun.txt
+        uses: akosdudas/ahk-action-neptuncheck@v1
+
+      - name: Prepare .NET SDK
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "2.1.607"
+
+      - name: Build sln
+        run: dotnet build
 
       - name: Evaluate
         uses: docker://akosdudas/ahk-sample:evaluator-v1
@@ -21,4 +32,5 @@ jobs:
         uses: akosdudas/ahk-action-publish-result-pr@master
         with:
           input-file: "result.txt"
+          image-extension: ".png"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
