@@ -29,7 +29,7 @@ jobs:
         uses: docker://akosdudas/ahk-sample:evaluator-v1
 
       - name: Publish results
-        uses: akosdudas/ahk-action-publish-result-pr@master
+        uses: akosdudas/ahk-action-publish-result-pr@v1
         with:
           input-file: "result.txt"
           image-extension: ".png"
