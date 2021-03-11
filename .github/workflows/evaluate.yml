@@ -1,12 +1,16 @@
 name: Evaluation
 
-on: [pull_request]
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review, labeled]
 
 jobs:
   evaluate:
     runs-on: ubuntu-latest
 
     timeout-minutes: 3
+
+    if: github.event.pull_request.draft == false
 
     steps:
       - name: Checkout
@@ -26,7 +30,7 @@ jobs:
         run: dotnet build
 
       - name: Evaluate
-        uses: docker://akosdudas/ahk-sample:evaluator-v1
+        uses: docker://ghcr.io/akosdudas/ahk-sample:evaluator-v1
 
       - name: Publish results
         uses: akosdudas/ahk-action-publish-result-pr@v1
